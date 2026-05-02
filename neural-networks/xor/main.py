@@ -1,24 +1,25 @@
 import numpy as np
 
-X = np.array([[0,0],[0,1],[1,0],[1,1]])
-y = np.array([[0],[1],[1],[0]])
+# [temp, rain, energy, time]
+X = np.array([
+    [25, 0, 8, 30],
+    [18, 1, 5, 20],
+    [22, 0, 7, 40],
+])
 
-W1 = np.random.randn(2,2)
-W2 = np.random.randn(2,1)
+y = np.array([[1], [0], [1]])
 
-def sigmoid(x): return 1/(1+np.exp(-x))
+weights = np.random.randn(4, 1)
+bias = 0
 
-for _ in range(5000):
-    # forward
-    h = sigmoid(X @ W1)
-    y_hat = sigmoid(h @ W2)
+def sigmoid(x):
+    return 1 / (1 + np.exp(-x))
 
-    # backward
+for _ in range(1000):
+    z = X @ weights + bias
+    y_hat = sigmoid(z)
+
     error = y_hat - y
-    dW2 = h.T @ error
-    dW1 = X.T @ ((error @ W2.T) * h * (1-h))
-
-    W1 -= 0.1 * dW1
-    W2 -= 0.1 * dW2
+    weights -= 0.01 * (X.T @ error)
 
 print(y_hat)
